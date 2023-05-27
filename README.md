@@ -9,7 +9,7 @@
 代码转服务器渲染
 
 技术栈
- vue3 + ts +pinia + vite  + nodejs + gitHub
+ vue3 + ts +pinia + vite  + nodejs + gitHub(命令行)
  
 生成文档：
   需求文档 原型图 概要设计
