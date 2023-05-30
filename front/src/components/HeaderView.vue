@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import IcoShuCheng from '@/assets/ico/IcoShuCheng.vue'
+import IcoAdd from '@/assets/ico/IcoAdd.vue'
 
-import { useUserInfoStore } from '@/stores/userInfo'
+import avatarUrl from '@/assets/ico/avatar.svg'
 
-const { userInfo, getUserInfo } = useUserInfoStore()
-getUserInfo()
+const title = import.meta.env.VITE_TITLE
 
 const selectInput = ref(null)
+
+import { useUserInfoStore } from '@/stores/userInfo'
+const { userInfo } = useUserInfoStore()
 </script>
 
 <template>
   <header>
     <div class="left_class">
-      <img src="@/assets/ico/书城.svg" :alt="userInfo.name" />
-      <h4 class="title_name">{{ userInfo.name }}</h4>
+      <IcoShuCheng style="margin-right: 10px" />
+      <h4 class="none_class title_name">{{ title }}</h4>
 
       <nav>
         <RouterLink to="/"> 首页 </RouterLink>
@@ -23,20 +27,19 @@ const selectInput = ref(null)
       </nav>
 
       <slot name="middle">
-        <input type="text" placeholder="搜书名/作者" v-model="selectInput" />
+        <input type="text" placeholder="搜书名/作者" v-model.trim="selectInput" />
       </slot>
     </div>
 
     <div class="right_class">
+      <span class="none_class">{{ userInfo.name }}</span>
       <div
-        :style="`background-image:url(${userInfo.headImg})`"
+        :style="`background-image:url(${userInfo.avatarUrl || avatarUrl})`"
         class="head_img_class"
         alt="头像"
       ></div>
 
-      <slot name="right">
-        <button>发布新书</button>
-      </slot>
+      <IcoAdd />
     </div>
   </header>
 </template>
@@ -45,7 +48,7 @@ const selectInput = ref(null)
 header {
   height: 60px;
   line-height: 60px;
-  margin: 0 20px;
+  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,15 +59,14 @@ header {
     align-items: center;
 
     ::v-deep a {
-      margin: 10px;
-      padding: 5px 10px;
+      transform: 4s;
       border-radius: 3px;
     }
 
-    img {
+    .icon {
       height: 20px;
-      color: red;
-      margin: 5px;
+      // color: red;
+      // margin: 5px;
       transform: rotateZ(180deg);
     }
 
@@ -84,6 +86,7 @@ header {
     align-items: center;
 
     .head_img_class {
+      cursor: pointer;
       height: 40px;
       width: 40px;
       background-repeat: no-repeat;
@@ -92,11 +95,42 @@ header {
       margin: 10px;
     }
 
-    button {
+    .icon {
       height: 27px;
-      width: 70px;
-      margin: 10px;
+      cursor: pointer;
     }
+  }
+}
+
+.none_class {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+@media (max-width: 800px) {
+  .none_class {
+    display: none;
+  }
+  .head_img_class {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  input {
+    width: 110px !important;
+    transform: 4s;
+  }
+}
+
+@media (min-width: 810px) {
+  ::v-deep a {
+    margin: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+
+  input {
+    width: 200px;
   }
 }
 </style>

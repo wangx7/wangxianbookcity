@@ -8,17 +8,29 @@
 a {
   text-decoration: none;
   color: #222;
-  /* transition: 0.4s; */
+  transition: 0.4s;
 }
 .router-link-active {
-  color: #315efb;
+  color: var(--vt-c-ico-hover);
 }
 
 @media (hover: hover) {
   a:hover {
     background-color: #f0f3fd;
-    color: #315efb;
+    color: var(--vt-c-ico-hover);
   }
+}
+
+input {
+  padding: 0 20px 0 10px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  transform: 0.4s;
+}
+input:hover {
+  border-color: var(--color-border-hover);
 }
 
 @media (min-width: 1024px) {
