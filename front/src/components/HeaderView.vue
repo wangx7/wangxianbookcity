@@ -33,11 +33,7 @@ const { userInfo } = useUserInfoStore()
 
     <div class="right_class">
       <span class="none_class">{{ userInfo.name }}</span>
-      <div
-        :style="`background-image:url(${userInfo.avatarUrl || avatarUrl})`"
-        class="head_img_class"
-        alt="头像"
-      ></div>
+      <img class="head_img_class" :src="userInfo.avatarUrl || avatarUrl" alt="用户头像" />
 
       <IcoAdd />
     </div>
@@ -65,13 +61,14 @@ header {
 
     .icon {
       height: 20px;
-      // color: red;
-      // margin: 5px;
+      color: var(--vt-c-ico-main);
       transform: rotateZ(180deg);
     }
 
     .title_name {
       margin-right: 60px;
+      font-weight: 700;
+      color: var(--vt-c-ico-main);
     }
   }
 
@@ -86,12 +83,10 @@ header {
     align-items: center;
 
     .head_img_class {
+      border-radius: 50%;
       cursor: pointer;
       height: 40px;
       width: 40px;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border-radius: 50%;
       margin: 10px;
     }
 
@@ -104,7 +99,6 @@ header {
 
 .none_class {
   display: inline-block;
-  margin-right: 20px;
 }
 
 @media (max-width: 800px) {
@@ -114,6 +108,7 @@ header {
   .head_img_class {
     width: 30px !important;
     height: 30px !important;
+    margin: 0 !important;
   }
 
   input {

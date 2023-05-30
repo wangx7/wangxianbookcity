@@ -182,11 +182,12 @@ function createUser(params: IAccount) {
     h1 {
       font-size: 22px;
       font-weight: 700;
+      color: var(--vt-c-ico-main);
     }
 
     .icon {
       height: 27px;
-      color: #c6b580;
+      color: var(--vt-c-ico-main);
       margin-right: 10px;
     }
   }
@@ -209,11 +210,11 @@ function createUser(params: IAccount) {
         display: inline-block;
         margin-right: 10px;
         text-align: right;
-        width: 60px;
+        width: 80px;
         margin-bottom: 5px;
       }
       input {
-        width: calc(100% - 70px);
+        width: calc(100% - 90px);
         padding: 0 20px;
         height: 30px;
         line-height: 30px;
@@ -245,6 +246,7 @@ function createUser(params: IAccount) {
 
     .submit_class {
       clear: both;
+      margin-left: 20px;
       button {
         width: 180px;
         height: 30px;
