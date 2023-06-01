@@ -1,5 +1,5 @@
 <template>
-  <div class="login_class">
+  <div class="login_class" v-loading="loading">
     <header>
       <IcoShuCheng />
       <h1>{{ title }}</h1>
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, shallowRef } from 'vue'
+import { reactive, ref, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
 import IcoShuCheng from '@/assets/ico/IcoShuCheng.vue'
 import IcoWeiXin from '@/assets/ico/IcoWeiXin.vue'
@@ -53,6 +53,7 @@ import { login, register, type IAccount } from '@/api/loginApi'
 
 const title = import.meta.env.VITE_TITLE
 const email = '2228639003@qq.com'
+const loading = ref(false)
 const formItems = reactive([
   {
     id: 'name',
@@ -134,6 +135,7 @@ function submit() {
 }
 
 function loginUser(params: IAccount) {
+  loading.value = true
   login(params)
     .then((res) => {
       const data = res.data
@@ -150,14 +152,19 @@ function loginUser(params: IAccount) {
         alert(err.data || '请求出错了，请联系管理员' + email)
       }
     })
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 function createUser(params: IAccount) {
+  loading.value = true
   register(params)
     .then(() => {
       loginUser(params)
     })
     .catch((err) => {
+      loading.value = false
       console.log(err)
     })
 }
@@ -203,7 +210,7 @@ function createUser(params: IAccount) {
         position: absolute;
         text-align: left;
         color: red;
-        margin-left: 90px;
+        margin-left: 111px;
       }
 
       label {
@@ -249,9 +256,6 @@ function createUser(params: IAccount) {
       margin-left: 20px;
       button {
         width: 180px;
-        height: 30px;
-        line-height: 30px;
-        cursor: pointer;
         background-color: var(--vt-c-ico-hover);
         border: none;
         margin: 20px 0px 10px 0;

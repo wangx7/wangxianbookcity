@@ -20,8 +20,8 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
-  --vt-c-ico-hover: #6cbf6f;
-  --vt-c-ico-main: #c6b580;
+  --vt-c-ico-hover: rgb(128, 189, 119);
+  --vt-c-ico-main: rgb(195, 182, 134);
 }
 
 /* semantic color variables for this project */
