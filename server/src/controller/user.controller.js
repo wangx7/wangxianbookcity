@@ -4,28 +4,39 @@ const userService = require('../service/user.service');
 const fileService = require('../service/file.service');
 const { AVATAR_PATH } = require('../constants/file-path');
 
-
 class UserController {
-  async create(ctx, next) {
-    // 获取用户请求传递的参数
-    const user = ctx.request.body;
+    async create(ctx, next) {
+        // 获取用户请求传递的参数
+        const user = ctx.request.body;
 
-    // 查询数据
-    const result = await userService.create(user);
+        // 查询数据
+        const result = await userService.create(user);
 
-    // 返回数据
-    ctx.body = result;
-  }
+        // 返回数据
+        ctx.body = result;
+    }
 
-  async avatarInfo(ctx, next) {
-    // 1.用户的头像是哪一个文件呢?
-    const { userId } = ctx.params;
-    const avatarInfo = await fileService.getAvatarByUserId(userId);
+    async updateUserInfo(ctx) {
+        // 获取用户请求传递的需要修改参数
+        const userInfo = ctx.request.body;
+        // 获取token中的用户信息
+        const user = ctx.user;
+        // 修改用户信息
+        const result = await userService.updateUserInfoById(userInfo, user);
+        result.msg = '记得重新登录刷新用户信息';
+        // 返回数据
+        ctx.body = result;
+    }
 
-    // 2.提供图像信息
-    ctx.response.set('content-type', avatarInfo.mimetype);
-    ctx.body = fs.createReadStream(`${AVATAR_PATH}/${avatarInfo.filename}`);
-  }
+    async avatarInfo(ctx, next) {
+        // 1.用户的头像是哪一个文件呢?
+        const { userId } = ctx.params;
+        const avatarInfo = await fileService.getAvatarByUserId(userId);
+
+        // 2.提供图像信息
+        ctx.response.set('content-type', avatarInfo.mimetype);
+        ctx.body = fs.createReadStream(`${AVATAR_PATH}/${avatarInfo.filename}`);
+    }
 }
 
 module.exports = new UserController();
