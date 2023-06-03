@@ -10,7 +10,7 @@ a {
   color: #222;
   transition: 0.4s;
 }
-.router-link-active {
+.router-link-exact-active {
   color: var(--vt-c-ico-hover);
 }
 
@@ -48,6 +48,7 @@ input:hover {
   justify-content: center;
   align-items: center;
   flex-flow: column;
+  z-index: 999;
 }
 
 .loading-spinner {

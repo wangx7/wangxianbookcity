@@ -1,7 +1,7 @@
 <template>
   <div class="wx-dialog" v-if="modelValue">
     <div class="wx-dialog-overlay"></div>
-    <div :style="styles" class="wx-dialog-content">
+    <div v-dialog-drag :style="styles" class="wx-dialog-content">
       <div class="wx-dialog-header">
         <slot name="header">
           <h3>{{ title }}</h3>
@@ -63,7 +63,7 @@ const close = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 99;
 
   .wx-dialog-overlay {
     position: absolute;

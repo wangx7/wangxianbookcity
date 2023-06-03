@@ -2,13 +2,12 @@ export default {
   name: 'dialog-drag',
   directive: {
     mounted: (el: HTMLElement) => {
+      const width = Math.floor(+el.style.width / 2)
       el.style.margin = '0'
-      el.style.left = '50%'
-      
+      el.style.left = `calv('50%' - ${width})`
+      el.style.position = 'absolute'
 
       el.onmousedown = function (e) {
-        e = e || window.event // 兼容 IE
-
         // 鼠标初始坐标
         const mouseX = e.clientX
         const mouseY = e.clientY
@@ -18,8 +17,6 @@ export default {
         const eleY = el.offsetTop
 
         document.onmousemove = function (e) {
-          e = e || window.event
-
           // 鼠标新坐标
           const newMouseX = e.clientX
           const newMouseY = e.clientY
@@ -32,9 +29,6 @@ export default {
           document.onmousemove = null
           document.onmouseup = null
         }
-
-        e.preventDefault && e.preventDefault()
-        return false // 处理高级浏览器 ctrl+A
       }
     }
   }

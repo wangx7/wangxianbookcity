@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import HeaderView from '@/components/HeaderView.vue'
+import HeaderView from './HeaderView.vue'
 
 import { useLabesStore } from '@/stores/labels'
 

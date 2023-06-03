@@ -1,47 +1,6 @@
-<template>
-  <header>
-    <div class="left_class">
-      <IcoShuCheng style="margin-right: 10px" />
-      <h4 class="none_class title_name">{{ title }}</h4>
-
-      <nav>
-        <RouterLink to="/"> 首页 </RouterLink>
-        <RouterLink to="/"> 分类 </RouterLink>
-        <RouterLink to="/"> 动态 </RouterLink>
-      </nav>
-
-      <slot name="middle">
-        <input type="text" placeholder="搜书名/作者" v-model.trim="selectInput" />
-      </slot>
-    </div>
-
-    <div class="right_class">
-      <span class="none_class">{{ userInfo.name }}</span>
-      <img class="head_img_class" :src="userInfo.avatarUrl || avatarUrl" alt="用户头像" />
-
-      <ul>
-        <li>个人中心</li>
-        <li @click="publishBookClick">发布新书</li>
-        <li>发布动态</li>
-        <li @click="exitClick">退出登录</li>
-      </ul>
-    </div>
-  </header>
-
-  <WxDialog title="发布新书" v-model="isShowBook">
-    <WxFrom :formItems="bookFrom" @submit="submit" ref="bookfromRef"></WxFrom>
-    <template #footer>
-      <button class="btn_lv" @click="saveClick">发布</button>
-    </template>
-  </WxDialog>
-</template>
-
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-
-import WxDialog from './globcpt/WxDialog.vue'
-import WxFrom from './globcpt/WxFrom.vue'
 
 import IcoShuCheng from '@/assets/ico/IcoShuCheng.vue'
 import avatarUrl from '@/assets/ico/avatar.svg'
@@ -61,7 +20,7 @@ const { labelcpd } = useLabesStore()
 
 // 类别， 书名，书链接，封面链接，书简介，书作者
 const isShowBook = ref(false)
-const bookfromRef = ref(null) as unknown as typeof WxFrom
+const bookfromRef = ref(null) as any
 interface Ioption {
   text: string | number
   value: string | number
@@ -156,6 +115,7 @@ function publishBookClick() {
  * 发布成功 关闭当前窗口
  * 清空值
  */
+const loading = ref(false)
 
 function submit() {
   const option = {} as any
@@ -163,6 +123,8 @@ function submit() {
   bookFrom.forEach((item) => {
     option[item.id] = item.value
   })
+
+  loading.value = true
 
   bookCreate(option)
     .then(() => {
@@ -172,6 +134,9 @@ function submit() {
     })
     .catch(() => {
       alert('发布失败')
+    })
+    .finally(() => {
+      loading.value = false
     })
 
   // reseBookFrom()
@@ -185,7 +150,9 @@ function reseBookFrom() {
 
 // 点击保存 进行发布
 function saveClick() {
-  bookfromRef.value.submit()
+  if (bookfromRef.value) {
+    bookfromRef.value.submit()
+  }
 }
 
 // 退出登录
@@ -196,6 +163,44 @@ function exitClick() {
   }
 }
 </script>
+
+<template>
+  <header>
+    <div class="left_class">
+      <IcoShuCheng style="margin-right: 10px" />
+      <h4 class="none_class title_name">{{ title }}</h4>
+
+      <nav>
+        <RouterLink to="/"> 首页 </RouterLink>
+        <RouterLink to="/book"> 书库 </RouterLink>
+        <RouterLink to="/moment"> 动态 </RouterLink>
+      </nav>
+
+      <slot name="middle">
+        <input type="text" placeholder="搜书名/作者" v-model.trim="selectInput" />
+      </slot>
+    </div>
+
+    <div class="right_class">
+      <span class="none_class">{{ userInfo.name }}</span>
+      <img class="head_img_class" :src="userInfo.avatarUrl || avatarUrl" alt="用户头像" />
+
+      <ul>
+        <li>个人中心</li>
+        <li @click="publishBookClick">发布新书</li>
+        <li>发布动态</li>
+        <li @click="exitClick">退出登录</li>
+      </ul>
+    </div>
+  </header>
+
+  <WxDialog title="发布新书" v-loading="loading" v-model="isShowBook">
+    <WxFrom :formItems="bookFrom" @submit="submit" ref="bookfromRef"></WxFrom>
+    <template #footer>
+      <button class="btn_lv" @click="saveClick">发布</button>
+    </template>
+  </WxDialog>
+</template>
 
 <style scoped lang="scss">
 header {
@@ -212,7 +217,7 @@ header {
     align-items: center;
 
     ::v-deep(a) {
-      transform: 4s;
+      // transition: 0.4s;
       border-radius: 3px;
     }
 
