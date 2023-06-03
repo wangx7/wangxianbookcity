@@ -38,36 +38,40 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+
+import WxDialog from './globcpt/WxDialog.vue'
+import WxFrom from './globcpt/WxFrom.vue'
+
 import IcoShuCheng from '@/assets/ico/IcoShuCheng.vue'
 import avatarUrl from '@/assets/ico/avatar.svg'
 
-const title = import.meta.env.VITE_TITLE
+import { useLabesStore } from '@/stores/labels'
+import { useUserInfoStore } from '@/stores/userInfo'
 
+import { bookCreate } from '@/api/book/bookApi'
+
+const title = import.meta.env.VITE_TITLE
 const selectInput = ref(null)
 
-import { useUserInfoStore } from '@/stores/userInfo'
-import router from '@/router'
-import WxDialog from './globcpt/WxDialog.vue'
-import WxFrom from './globcpt/WxFrom.vue'
+const router = useRouter()
+
 const { userInfo } = useUserInfoStore()
+const { labelcpd } = useLabesStore()
 
 // 类别， 书名，书链接，封面链接，书简介，书作者
 const isShowBook = ref(false)
 const bookfromRef = ref(null) as unknown as typeof WxFrom
+interface Ioption {
+  text: string | number
+  value: string | number
+  disabled?: boolean
+}
 const bookFrom = reactive([
   {
-    id: 'type',
+    id: 'labelId',
     type: 'select',
-    options: [
-      { value: '', text: '-请选择书籍类型', disabled: true },
-      { value: '1', text: '前端开发' },
-      { value: '2', text: '后端开发' },
-      { value: '4', text: '其他网络科技类' },
-      { value: '5', text: '网络小说' },
-      { value: '6', text: '名著' },
-      { value: '7', text: '其他' }
-    ],
+    options: [] as Ioption[],
     label: '类别',
     value: '',
     rules: [{ require: true, msg: '请选择类别', trigger: 'change' }],
@@ -108,7 +112,7 @@ const bookFrom = reactive([
     msg: ''
   },
   {
-    id: 'jieshao',
+    id: 'blurb',
     type: 'textarea',
     label: '书简介',
     value: '',
@@ -141,18 +145,50 @@ const bookFrom = reactive([
   }
 ])
 
+// 发布书籍
 function publishBookClick() {
+  bookFrom[0].options = [{ value: '', text: '-请选择书籍类型', disabled: true }, ...labelcpd.value]
   isShowBook.value = true
 }
 
+/**
+ * 发布接口
+ * 发布成功 关闭当前窗口
+ * 清空值
+ */
+
 function submit() {
-  console.log(bookFrom)
+  const option = {} as any
+
+  bookFrom.forEach((item) => {
+    option[item.id] = item.value
+  })
+
+  bookCreate(option)
+    .then(() => {
+      alert('发布成功')
+      isShowBook.value = false
+      reseBookFrom()
+    })
+    .catch(() => {
+      alert('发布失败')
+    })
+
+  // reseBookFrom()
 }
 
+function reseBookFrom() {
+  bookFrom.forEach((item) => {
+    item.value = ''
+  })
+}
+
+// 点击保存 进行发布
 function saveClick() {
   bookfromRef.value.submit()
 }
 
+// 退出登录
 function exitClick() {
   if (confirm('确定退出吗？')) {
     localStorage.clear()
@@ -222,7 +258,7 @@ header {
       right: 0;
       position: absolute;
       line-height: 30px;
-      top: 60px;
+      top: 50px;
       background-color: #fff;
       box-shadow: 0 6px 14px 0 rgba(158, 172, 182, 0.25);
       border-radius: 5px;
@@ -240,6 +276,12 @@ header {
       li:hover {
         background-color: var(--color-background-soft);
         color: var(--vt-c-ico-hover);
+      }
+    }
+
+    @media (max-width: 800px) {
+      ul {
+        top: 30px;
       }
     }
   }

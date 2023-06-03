@@ -17,4 +17,3 @@ app.use(directive)
 app.use(globcpt)
 
 app.mount('#app')
-
