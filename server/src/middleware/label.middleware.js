@@ -20,11 +20,13 @@ const verifyLabel = async (ctx, next) => {
 const verifyList = async (ctx, next) => {
     let { limit, offset } = ctx.request.body;
     if (!(limit >= 0 && offset >= 0)) {
-        ctx.request.body.limit = 0;
-        ctx.request.body.offset = 10;
+        ctx.request.body.limit = '10';
+        ctx.request.body.offset = '0';
     }
+    ctx.request.body.limit += '';
+    ctx.request.body.offset += '';
 
-    await next;
+    await next();
 };
 
 const verifyLabelExists = async (ctx, next) => {

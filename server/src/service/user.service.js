@@ -30,7 +30,6 @@ class UserService {
         let values = [];
         let i = 0;
 
-        console.log(userInfo, user, 123);
         for (let key in user) {
             if (['id', 'creteAt', 'updateAt'].some(item => item !== 'key') && userInfo[key] && userInfo[key] !== user[key]) {
                 if (i > 0) {

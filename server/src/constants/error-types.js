@@ -8,7 +8,9 @@ const UNPERMISSION = 'unpermission';
 const LABEL_IS_REQUIRED = 'label_is_required';
 const LABEL_ALREADY_EXISTS = 'label_already_exists';
 
-const BOOKS_IS_REQUIRED = "books_is_required"
+const BOOKS_IS_REQUIRED = 'books_is_required';
+const ID_IS_REQUIRED = 'id_is_required';
+const ID_ALREADY_EXISTS = 'id_already_exists'
 
 module.exports = {
     NAME_OR_PASSWORD_IS_REQUIRED,
@@ -19,5 +21,7 @@ module.exports = {
     UNPERMISSION,
     LABEL_IS_REQUIRED,
     LABEL_ALREADY_EXISTS,
-    BOOKS_IS_REQUIRED
+    BOOKS_IS_REQUIRED,
+    ID_IS_REQUIRED,
+    ID_ALREADY_EXISTS
 };

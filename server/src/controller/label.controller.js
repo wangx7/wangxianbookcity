@@ -8,12 +8,8 @@ class LabelController {
     }
 
     async list(ctx, next) {
-        let { limit, offset } = ctx.request.body;
-        if (!(limit >= 0 && offset >= 0)) {
-            limit = 0;
-            offset = 10;
-        }
-        const result = await service.getLabels(+limit, +offset);
+        let { offset, limit } = ctx.request.body;
+        const result = await service.getLabels(offset, limit);
         ctx.body = result;
     }
 }

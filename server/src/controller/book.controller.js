@@ -4,8 +4,9 @@ class BookController {
     async create(ctx, next) {
         const { id } = ctx.user;
         const body = ctx.request.body;
-        body.createUserId = id;
+        body.userId = id;
         const result = await service.create(body);
+        console.log(result, 'result');
         ctx.body = result;
     }
 
@@ -13,6 +14,16 @@ class BookController {
         let { limit, offset } = ctx.request.body;
         const result = await service.getBooks(offset, limit);
         ctx.body = result;
+    }
+
+    async updata(ctx) {
+        const result = await service.updataBooks(ctx.newBook, ctx.oldBook);
+        ctx.body = result;
+    }
+
+    async getBookHistory(ctx) {
+        const books = await service.getBookById(ctx.user.bookHistory);
+        ctx.body = books;
     }
 }
 

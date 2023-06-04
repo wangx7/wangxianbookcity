@@ -50,6 +50,7 @@ const verifyAuth = async (ctx, next) => {
         const result = jwt.verify(token, PUBLIC_KEY, {
             algorithms: ['RS256']
         });
+
         // 获取用户信息
         ctx.user = result;
         await next();

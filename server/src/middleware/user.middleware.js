@@ -1,5 +1,6 @@
 const errorTypes = require('../constants/error-types');
 const service = require('../service/user.service');
+const serviceBook = require('../service/book.service');
 const md5password = require('../utils/password-handle');
 
 const verifyUser = async (ctx, next) => {
@@ -31,7 +32,43 @@ const handlePassword = async (ctx, next) => {
     await next();
 };
 
+const verifyBookHistory = async (ctx, next) => {
+    const { id } = ctx.request.body;
+
+    if (!id && !isNaN(id)) {
+        const error = new Error(errorTypes.ID_IS_REQUIRED);
+        return ctx.app.emit('error', error, ctx);
+    }
+
+    const [oldBook] = await serviceBook.getBookById(id);
+    if (!oldBook) {
+        const error = new Error(errorTypes.ID_ALREADY_EXISTS);
+        return ctx.app.emit('error', error, ctx);
+    }
+
+    const [oldUser] = await service.getUserByName(ctx.user.name);
+
+    if (!oldUser) {
+        const error = new Error(errorTypes.USER_ALREADY_EXISTS);
+        return ctx.app.emit('error', error, ctx);
+    }
+    ctx.user = oldUser
+
+    ctx.request.body = {
+        bookHistory: id
+    };
+
+    if (oldUser.bookHistory) {
+        let historys = oldUser.bookHistory.split(',');
+        historys.unshift(id);
+        ctx.request.body.bookHistory = [...new Set(historys.map(id => +id))].splice(0,10).join(',');
+    }
+
+    await next();
+};
+
 module.exports = {
     verifyUser,
-    handlePassword
+    handlePassword,
+    verifyBookHistory
 };

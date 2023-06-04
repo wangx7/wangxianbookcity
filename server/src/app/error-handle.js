@@ -4,6 +4,15 @@ const errorHandler = (error, ctx) => {
     let status, message;
 
     switch (error.message) {
+        case errorTypes.ID_ALREADY_EXISTS:
+            status = 400; // Bad Request
+            message = 'id不存在~';
+            break;
+        
+        case errorTypes.ID_IS_REQUIRED:
+            status = 400; // Bad Request
+            message = 'id不能为空~';
+            break;
         case errorTypes.BOOKS_IS_REQUIRED:
             status = 400; // Bad Request
             message = '书信息不完整~';
