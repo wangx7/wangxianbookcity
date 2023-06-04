@@ -5,10 +5,18 @@ export interface IAccount {
   password: string
 }
 
+export interface Id {
+  id: number
+}
+
 export function login(data: IAccount) {
   return axios.post('/login', data)
 }
 
 export function register(data: IAccount) {
   return axios.post('/users/register', data)
+}
+
+export function addBookHistory(data: Id) {
+  return axios.post<any>('/users/addBookHistory', data)
 }

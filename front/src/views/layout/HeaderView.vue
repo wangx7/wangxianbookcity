@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 import IcoShuCheng from '@/assets/ico/IcoShuCheng.vue'
@@ -78,11 +78,11 @@ const bookFrom = reactive([
     placeholder: '请填写书简介',
     rules: [
       { require: true, msg: '请填写书简介', trigger: 'blur' },
-      {
-        regular: /^[\w\u4e00-\u9fa5，。：；！]{1,200}$/,
-        msg: '格式为200位以内的汉字、数字、字母及常用符号',
-        trigger: 'blur'
-      }
+      // {
+      //   regular: /^[\w\u4e00-\u9fa5，。：；！]{1,200}$/,
+      //   msg: '格式为200位以内的汉字、数字、字母及常用符号',
+      //   trigger: 'blur'
+      // }
     ],
     msg: ''
   },
@@ -162,6 +162,16 @@ function exitClick() {
     router.push('/login')
   }
 }
+
+const isShowInput = ref(false)
+
+watch(
+  () => router.currentRoute.value.path,
+  (newValue) => {
+    isShowInput.value = newValue === '/book'
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -176,9 +186,7 @@ function exitClick() {
         <RouterLink to="/moment"> 动态 </RouterLink>
       </nav>
 
-      <slot name="middle">
-        <input type="text" placeholder="搜书名/作者" v-model.trim="selectInput" />
-      </slot>
+      <input type="text" v-if="isShowInput" placeholder="搜书名/作者" v-model.trim="selectInput" />
     </div>
 
     <div class="right_class">
@@ -204,6 +212,9 @@ function exitClick() {
 
 <style scoped lang="scss">
 header {
+  position: sticky;
+  z-index: 9;
+  top: 0;
   height: 60px;
   line-height: 60px;
   padding: 0 20px;
@@ -211,6 +222,9 @@ header {
   align-items: center;
   justify-content: space-between;
   background-color: var(--color-background-soft);
+  backdrop-filter: blur(12px);
+
+  // background-color: #ffffffcf;
 
   .left_class {
     display: flex;

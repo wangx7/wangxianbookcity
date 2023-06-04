@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-    <div>book</div>
+  <div style="clear: both">book</div>
 </template>

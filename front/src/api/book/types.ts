@@ -19,7 +19,12 @@ export interface IBookRes {
   coverHref: string
   blurb: string
   author: string
-  userId: string
+  userId: number
   createAt: Date
   updateAt: Date
+}
+
+export interface IDataType<T = any> {
+  code: number
+  data: T
 }
